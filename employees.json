@@ -8,6 +8,15 @@
       "joiningDate": "2024-01-15",
       "email": "rahul@company.com",
       "phone": "9876543210"
+    },
+    {
+      "id": 1780291606521,
+      "name": "ASHOK",
+      "department": "HR",
+      "salary": 21500,
+      "email": "HRD.@WATERFLO.COM",
+      "phone": "9977885522",
+      "joiningDate": "2000-06-29"
     }
   ]
 }
