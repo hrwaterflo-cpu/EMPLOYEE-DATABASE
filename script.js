@@ -1,9 +1,10 @@
 // ============== CONFIGURATION ==============
+// IMPORTANT: Update these with YOUR GitHub details
 const CONFIG = {
-    OWNER: 'hrwaterflo-cpu',      // <-- Yahan apna username daalo
-    REPO: 'employee-database',               // <-- Repository ka naam
-    FILE_PATH: 'employees.json',             // <-- JSON file ka path
-    BRANCH: 'main'                           // <-- Branch name
+    OWNER: 'hrwaterflo-cpu',           // Your GitHub username
+    REPO: 'EMPLOYEE-DATABASE',          // Your repository name
+    FILE_PATH: 'employees.json',
+    BRANCH: 'main'
 };
 
 // ============== STATE ==============
@@ -15,53 +16,86 @@ const form = document.getElementById('employeeForm');
 const listContainer = document.getElementById('employeeList');
 const searchInput = document.getElementById('searchInput');
 const tokenInput = document.getElementById('githubToken');
+const saveTokenBtn = document.getElementById('saveTokenBtn');
 
 // ============== INITIALIZATION ==============
 document.addEventListener('DOMContentLoaded', () => {
+    // Load saved token from localStorage
+    const savedToken = localStorage.getItem('github_token');
+    if (savedToken) {
+        tokenInput.value = savedToken;
+    }
+
     loadEmployees();
     form.addEventListener('submit', addEmployee);
     searchInput.addEventListener('input', filterEmployees);
+    saveTokenBtn.addEventListener('click', saveToken);
 });
 
-// ============== STEP 1: DATA LOAD KARNA ==============
+// ============== TOKEN MANAGEMENT ==============
+function saveToken() {
+    const token = tokenInput.value.trim();
+    if (token) {
+        localStorage.setItem('github_token', token);
+        showMessage('Token saved in browser!', 'success');
+    } else {
+        showMessage('Please enter a token first!', 'error');
+    }
+}
+
+// ============== STEP 1: LOAD DATA FROM GITHUB ==============
 async function loadEmployees() {
     showLoading();
     try {
-        // GitHub raw URL se data fetch karna (No token needed for reading)
-        const url = `https://raw.githubusercontent.com/${CONFIG.OWNER}/${CONFIG.REPO}/${CONFIG.BRANCH}/${CONFIG.FILE_PATH}`;
-        
-        const response = await fetch(url);
-        
+        // CACHE-BUSTING: Add timestamp to bypass CDN cache
+        // Ye har request unique banata hai, isliye cache nahi lagta
+        const timestamp = new Date().getTime();
+        const url = `https://raw.githubusercontent.com/${CONFIG.OWNER}/${CONFIG.REPO}/${CONFIG.BRANCH}/${CONFIG.FILE_PATH}?nocache=${timestamp}`;
+
+        const response = await fetch(url, {
+            cache: 'no-store',  // Browser cache bhi disable karo
+            headers: {
+                'Cache-Control': 'no-cache',
+                'Pragma': 'no-cache'
+            }
+        });
+
         if (!response.ok) {
-            throw new Error('Data load nahi hua! Pehli baar hai toh empty list dikhayenge.');
+            console.log('First time load or file missing');
+            employees = [];
+            renderEmployees();
+            return;
         }
-        
+
         const data = await response.json();
         employees = data.employees || [];
         renderEmployees();
-        
+
     } catch (error) {
-        console.log('Pehli baar load ho raha hai ya file missing hai:', error);
+        console.log('Error loading:', error);
         employees = [];
         renderEmployees();
     }
 }
 
-// ============== STEP 2: DATA SAVE KARNA (GitHub API) ==============
+// ============== STEP 2: SAVE DATA TO GITHUB ==============
 async function saveToGitHub() {
-    const token = tokenInput.value.trim();
-    
+    const token = tokenInput.value.trim() || localStorage.getItem('github_token');
+
     if (!token) {
-        alert('❌ GitHub Token daalo! Bina token ke save nahi hoga!');
+        alert('❌ GitHub Token daalo!\n\nBina token ke data save nahi hoga!\n\nToken kaise banaye:\n1. GitHub → Settings → Developer settings\n2. Personal access tokens → Tokens (classic)\n3. Generate new token\n4. "repo" scope select karo\n5. Token copy karke yahan paste karo');
         return false;
     }
 
     try {
+        showLoading('💾 Saving to GitHub...');
+
         // Pehle existing file ka SHA lena padega (update karne ke liye)
         const sha = await getFileSHA(token);
-        
-        const content = btoa(JSON.stringify({ employees }, null, 2));
-        
+
+        // Data ko Base64 mein convert karna
+        const content = btoa(unescape(encodeURIComponent(JSON.stringify({ employees }, null, 2))));
+
         const response = await fetch(
             `https://api.github.com/repos/${CONFIG.OWNER}/${CONFIG.REPO}/contents/${CONFIG.FILE_PATH}`,
             {
@@ -84,17 +118,22 @@ async function saveToGitHub() {
             throw new Error(error.message);
         }
 
-        alert('✅ Data successfully saved to GitHub!');
+        showMessage('✅ Data successfully saved to GitHub!', 'success');
+
+        // IMPORTANT: Cache clear karne ke liye thoda wait karo
+        // GitHub CDN ko update hone mein 5-10 second lagte hain
+        await new Promise(resolve => setTimeout(resolve, 3000));
+
         return true;
-        
+
     } catch (error) {
-        alert('❌ Error: ' + error.message);
+        showMessage('❌ Error: ' + error.message, 'error');
         console.error(error);
         return false;
     }
 }
 
-// ============== HELPER: File SHA Lena ==============
+// ============== HELPER: Get File SHA ==============
 async function getFileSHA(token) {
     try {
         const response = await fetch(
@@ -105,7 +144,7 @@ async function getFileSHA(token) {
                 }
             }
         );
-        
+
         if (response.ok) {
             const data = await response.json();
             return data.sha;
@@ -119,39 +158,51 @@ async function getFileSHA(token) {
 // ============== STEP 3: ADD EMPLOYEE ==============
 async function addEmployee(e) {
     e.preventDefault();
-    
+
     const newEmployee = {
         id: Date.now(), // Unique ID
-        name: document.getElementById('name').value,
-        department: document.getElementById('department').value,
+        name: document.getElementById('name').value.trim(),
+        department: document.getElementById('department').value.trim(),
         salary: parseInt(document.getElementById('salary').value),
-        email: document.getElementById('email').value,
-        phone: document.getElementById('phone').value,
+        email: document.getElementById('email').value.trim(),
+        phone: document.getElementById('phone').value.trim(),
         joiningDate: document.getElementById('joiningDate').value
     };
 
+    // Validation
+    if (!newEmployee.name || !newEmployee.department || !newEmployee.email) {
+        showMessage('❌ Please fill all required fields!', 'error');
+        return;
+    }
+
     employees.push(newEmployee);
-    
+
     if (await saveToGitHub()) {
         renderEmployees();
         form.reset();
+        document.getElementById('joiningDate').valueAsDate = new Date();
+
+        // Cache clear ke liye force reload ka option dikhayein
+        showCacheClearMessage();
     } else {
-        // Agar save fail hua toh employee hata do (rollback)
         employees.pop();
+        renderEmployees();
     }
 }
 
 // ============== STEP 4: DELETE EMPLOYEE ==============
 async function deleteEmployee(id) {
-    if (!confirm('Kya aap sure ho delete karne ke liye?')) return;
-    
+    if (!confirm('⚠️ Kya aap sure ho delete karne ke liye?')) return;
+
     const originalEmployees = [...employees];
     employees = employees.filter(emp => emp.id !== id);
-    
+
     if (await saveToGitHub()) {
         renderEmployees();
+        showCacheClearMessage();
     } else {
-        employees = originalEmployees; // Rollback
+        employees = originalEmployees;
+        renderEmployees();
     }
 }
 
@@ -161,37 +212,63 @@ async function editEmployee(id) {
     if (!emp) return;
 
     const newName = prompt('Name:', emp.name);
-    if (newName === null) return; // Cancel kiya
-    
+    if (newName === null) return;
+
     const originalEmp = { ...emp };
-    
-    emp.name = newName || emp.name;
-    emp.department = prompt('Department:', emp.department) || emp.department;
-    emp.salary = parseInt(prompt('Salary:', emp.salary)) || emp.salary;
-    emp.email = prompt('Email:', emp.email) || emp.email;
-    emp.phone = prompt('Phone:', emp.phone) || emp.phone;
+
+    emp.name = newName.trim() || emp.name;
+    emp.department = prompt('Department:', emp.department)?.trim() || emp.department;
+    const newSalary = prompt('Salary:', emp.salary);
+    emp.salary = newSalary ? parseInt(newSalary) : emp.salary;
+    emp.email = prompt('Email:', emp.email)?.trim() || emp.email;
+    emp.phone = prompt('Phone:', emp.phone)?.trim() || emp.phone;
 
     if (await saveToGitHub()) {
         renderEmployees();
+        showCacheClearMessage();
     } else {
-        // Rollback
         Object.assign(emp, originalEmp);
+        renderEmployees();
     }
+}
+
+// ============== CACHE CLEAR MESSAGE ==============
+function showCacheClearMessage() {
+    const div = document.createElement('div');
+    div.className = 'success';
+    div.innerHTML = `
+        ✅ Data saved! <br>
+        <small>Agar refresh karne pe purana data dikhe toh: <br>
+        <b>Ctrl + Shift + R</b> dabao (Hard Reload)</small>
+    `;
+    div.style.position = 'fixed';
+    div.style.top = '20px';
+    div.style.right = '20px';
+    div.style.zIndex = '1000';
+    div.style.maxWidth = '400px';
+    document.body.appendChild(div);
+
+    setTimeout(() => div.remove(), 8000);
 }
 
 // ============== RENDER FUNCTIONS ==============
 function renderEmployees(data = employees) {
     if (data.length === 0) {
-        listContainer.innerHTML = '<div class="loading">📭 Koi employee nahi hai! Naya add karo.</div>';
+        listContainer.innerHTML = `
+            <div class="empty-state">
+                <h3>📭 Koi employee nahi hai!</h3>
+                <p>Upar form se naya employee add karo.</p>
+            </div>
+        `;
         return;
     }
 
     listContainer.innerHTML = data.map(emp => `
         <div class="employee-card">
             <div class="employee-info">
-                <h3>${emp.name} <span class="badge">${emp.department}</span></h3>
-                <p>📧 ${emp.email} | 📱 ${emp.phone}</p>
-                <p>💰 Salary: ₹${emp.salary.toLocaleString()} | 📅 Joined: ${emp.joiningDate}</p>
+                <h3>${escapeHtml(emp.name)} <span class="badge">${escapeHtml(emp.department)}</span></h3>
+                <p>📧 ${escapeHtml(emp.email)} | 📱 ${escapeHtml(emp.phone)}</p>
+                <p>💰 Salary: ₹${emp.salary?.toLocaleString() || 'N/A'} | 📅 Joined: ${emp.joiningDate || 'N/A'}</p>
             </div>
             <div class="employee-actions">
                 <button class="edit-btn" onclick="editEmployee(${emp.id})">✏️ Edit</button>
@@ -202,14 +279,44 @@ function renderEmployees(data = employees) {
 }
 
 function filterEmployees() {
-    const search = searchInput.value.toLowerCase();
+    const search = searchInput.value.toLowerCase().trim();
+    if (!search) {
+        renderEmployees();
+        return;
+    }
+
     const filtered = employees.filter(emp => 
-        emp.name.toLowerCase().includes(search) ||
-        emp.department.toLowerCase().includes(search)
+        emp.name?.toLowerCase().includes(search) ||
+        emp.department?.toLowerCase().includes(search) ||
+        emp.email?.toLowerCase().includes(search)
     );
     renderEmployees(filtered);
 }
 
-function showLoading() {
-    listContainer.innerHTML = '<div class="loading">⏳ Loading employees...</div>';
+function showLoading(message = '⏳ Loading employees...') {
+    listContainer.innerHTML = `<div class="loading">${message}</div>`;
 }
+
+function showMessage(msg, type) {
+    const div = document.createElement('div');
+    div.className = type;
+    div.textContent = msg;
+    div.style.position = 'fixed';
+    div.style.top = '20px';
+    div.style.right = '20px';
+    div.style.zIndex = '1000';
+    div.style.maxWidth = '400px';
+    document.body.appendChild(div);
+
+    setTimeout(() => div.remove(), 5000);
+}
+
+function escapeHtml(text) {
+    if (!text) return '';
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+}
+
+// Set default date to today
+document.getElementById('joiningDate').valueAsDate = new Date();
