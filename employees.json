@@ -1,0 +1,13 @@
+{
+  "employees": [
+    {
+      "id": 1,
+      "name": "Rahul Sharma",
+      "department": "IT",
+      "salary": 50000,
+      "joiningDate": "2024-01-15",
+      "email": "rahul@company.com",
+      "phone": "9876543210"
+    }
+  ]
+}
