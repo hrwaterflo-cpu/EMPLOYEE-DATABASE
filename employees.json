@@ -1,22 +1,13 @@
 {
   "employees": [
     {
-      "id": 1,
-      "name": "Rahul Sharma",
-      "department": "IT",
-      "salary": 50000,
-      "joiningDate": "2024-01-15",
-      "email": "rahul@company.com",
-      "phone": "9876543210"
-    },
-    {
-      "id": 1780291721136,
+      "id": 1780292057377,
       "name": "ASHOK",
       "department": "HR",
-      "salary": 21500,
+      "salary": 215000,
       "email": "HR@GMAIL.COM",
-      "phone": "9945745785",
-      "joiningDate": "2001-06-29"
+      "phone": "9978245478",
+      "joiningDate": "2006-06-01"
     }
   ]
 }
