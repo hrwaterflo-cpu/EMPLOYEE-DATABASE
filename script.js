@@ -1,6 +1,6 @@
 // ============== CONFIGURATION ==============
 const CONFIG = {
-    OWNER: 'TUMHARA_GITHUB_USERNAME',      // <-- Yahan apna username daalo
+    OWNER: 'hrwaterflo-cpu',      // <-- Yahan apna username daalo
     REPO: 'employee-database',               // <-- Repository ka naam
     FILE_PATH: 'employees.json',             // <-- JSON file ka path
     BRANCH: 'main'                           // <-- Branch name
