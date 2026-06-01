@@ -2,636 +2,809 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee Master Record - Indian Government Law</title>
     <link rel="stylesheet" href="style.css">
-    <title>Employee Details - As Per Indian Government Law</title>
+<base target="_blank">
 </head>
 <body>
 
-<h1>EMPLOYEE MASTER RECORD</h1>
-<h2>Mandatory Details as per Indian Government Law</h2>
-<p><b>Note:</b> This form covers all statutory requirements under EPFO, ESIC, Income Tax, Shops & Establishment Act, and other Labour Laws.</p>
+<!-- ===== HEADER ===== -->
+<div class="form-header">
+    <h1>Employee <span>Master Record</span></h1>
+    <h2>As Per Indian Government Law</h2>
+    <div class="badge-row">
+        <span class="badge">EPFO</span>
+        <span class="badge">ESIC</span>
+        <span class="badge">TDS</span>
+        <span class="badge">Labour Act</span>
+        <span class="badge">Factory Act</span>
+    </div>
+</div>
 
-<form action="#" method="post">
+<!-- ===== MAIN WRAPPER ===== -->
+<div class="main-wrapper">
 
-<!-- SECTION 1: PERSONAL DETAILS -->
-<fieldset>
-    <legend><b>1. PERSONAL DETAILS (Mandatory for All Records)</b></legend>
-    
-    <p>
-        <label>Employee Full Name (as per Aadhaar):</label><br>
-        <input type="text" name="emp_name" placeholder="Full Name" required>
-    </p>
-    
-    <p>
-        <label>Father's Name / Spouse Name:</label><br>
-        <input type="text" name="father_name" placeholder="Father's/Spouse Name" required>
-    </p>
-    
-    <p>
-        <label>Date of Birth (as per Aadhaar):</label><br>
-        <input type="date" name="dob" required>
-    </p>
-    
-    <p>
-        <label>Gender:</label><br>
-        <input type="radio" name="gender" value="Male" required> Male
-        <input type="radio" name="gender" value="Female"> Female
-        <input type="radio" name="gender" value="Transgender"> Transgender
-    </p>
-    
-    <p>
-        <label>Marital Status:</label><br>
-        <select name="marital_status" required>
-            <option value="">--Select--</option>
-            <option value="Single">Single</option>
-            <option value="Married">Married</option>
-            <option value="Divorced">Divorced</option>
-            <option value="Widowed">Widowed</option>
-        </select>
-    </p>
-    
-    <p>
-        <label>Nationality:</label><br>
-        <input type="text" name="nationality" value="Indian" required>
-    </p>
-    
-    <p>
-        <label>Religion (for ESI Family Details):</label><br>
-        <input type="text" name="religion" placeholder="Religion">
-    </p>
-    
-    <p>
-        <label>Category (SC/ST/OBC/General):</label><br>
-        <select name="category">
-            <option value="">--Select--</option>
-            <option value="General">General</option>
-            <option value="SC">SC</option>
-            <option value="ST">ST</option>
-            <option value="OBC">OBC</option>
-        </select>
-    </p>
-    
-    <p>
-        <label>Educational Qualification:</label><br>
-        <input type="text" name="education" placeholder="Highest Qualification">
-    </p>
-</fieldset>
+    <!-- ===== SIDEBAR NAVIGATION ===== -->
+    <nav class="sidebar">
+        <div class="nav-card">
+            <div class="nav-title">Navigate Sections</div>
 
-<br>
+            <a href="#sec1" class="nav-item active">
+                <div class="nav-icon">👤</div>
+                <span class="nav-text">Personal Details</span>
+            </a>
+            <a href="#sec2" class="nav-item">
+                <div class="nav-icon">🆔</div>
+                <span class="nav-text">Identity Proof</span>
+            </a>
+            <a href="#sec3" class="nav-item">
+                <div class="nav-icon">💼</div>
+                <span class="nav-text">Employment</span>
+            </a>
+            <a href="#sec4" class="nav-item">
+                <div class="nav-icon">🏦</div>
+                <span class="nav-text">Bank Details</span>
+            </a>
+            <a href="#sec5" class="nav-item">
+                <div class="nav-icon">📋</div>
+                <span class="nav-text">Statutory Reg.</span>
+            </a>
+            <a href="#sec6" class="nav-item">
+                <div class="nav-icon">💰</div>
+                <span class="nav-text">Salary Details</span>
+            </a>
+            <a href="#sec7" class="nav-item">
+                <div class="nav-icon">👨‍👩‍👧</div>
+                <span class="nav-text">Nominee</span>
+            </a>
+            <a href="#sec8" class="nav-item">
+                <div class="nav-icon">🏠</div>
+                <span class="nav-text">Family Details</span>
+            </a>
+            <a href="#sec9" class="nav-item">
+                <div class="nav-icon">🧾</div>
+                <span class="nav-text">Income Tax</span>
+            </a>
+            <a href="#sec10" class="nav-item">
+                <div class="nav-icon">⏰</div>
+                <span class="nav-text">Attendance</span>
+            </a>
+            <a href="#sec11" class="nav-item">
+                <div class="nav-icon">📝</div>
+                <span class="nav-text">Contract Worker</span>
+            </a>
+            <a href="#sec12" class="nav-item">
+                <div class="nav-icon">✍️</div>
+                <span class="nav-text">Declaration</span>
+            </a>
 
-<!-- SECTION 2: IDENTITY PROOF (Mandatory for EPFO/ESI/PAN) -->
-<fieldset>
-    <legend><b>2. IDENTITY & ADDRESS PROOF (Statutory Requirement)</b></legend>
-    
-    <p>
-        <label>Aadhaar Number (12 digits) - Mandatory for UAN:</label><br>
-        <input type="text" name="aadhaar" maxlength="12" placeholder="XXXX XXXX XXXX" required>
-    </p>
-    
-    <p>
-        <label>PAN Number (10 digits) - Mandatory for Income Tax:</label><br>
-        <input type="text" name="pan" maxlength="10" placeholder="ABCDE1234F" required>
-    </p>
-    
-    <p>
-        <label>Voter ID / Passport / Driving License (Optional ID):</label><br>
-        <input type="text" name="other_id" placeholder="ID Number">
-    </p>
-    
-    <p>
-        <label>Permanent Address (as per Aadhaar):</label><br>
-        <textarea name="permanent_address" rows="3" cols="50" placeholder="House No, Street, City, State, PIN Code" required></textarea>
-    </p>
-    
-    <p>
-        <label>Current / Communication Address:</label><br>
-        <textarea name="current_address" rows="3" cols="50" placeholder="House No, Street, City, State, PIN Code" required></textarea>
-    </p>
-    
-    <p>
-        <label>Mobile Number (linked to Aadhaar for UAN):</label><br>
-        <input type="tel" name="mobile" maxlength="10" placeholder="10 Digit Mobile Number" required>
-    </p>
-    
-    <p>
-        <label>Email ID:</label><br>
-        <input type="email" name="email" placeholder="employee@email.com" required>
-    </p>
-    
-    <p>
-        <label>Photograph (for ESI Card & Records):</label><br>
-        <input type="file" name="photo" accept="image/*">
-    </p>
-</fieldset>
+            <div class="progress-wrap">
+                <div class="progress-label">
+                    <span>Form Completion</span>
+                    <span>0%</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill"></div>
+                </div>
+            </div>
+        </div>
+    </nav>
 
-<br>
+    <!-- ===== CONTENT AREA ===== -->
+    <div class="content-area">
 
-<!-- SECTION 3: EMPLOYMENT DETAILS (Mandatory for Labour Records) -->
-<fieldset>
-    <legend><b>3. EMPLOYMENT DETAILS (Shops & Establishment Act / Factory Act)</b></legend>
-    
-    <p>
-        <label>Employee Code / ID:</label><br>
-        <input type="text" name="emp_code" placeholder="EMP-XXXX" required>
-    </p>
-    
-    <p>
-        <label>Date of Joining:</label><br>
-        <input type="date" name="doj" required>
-    </p>
-    
-    <p>
-        <label>Designation:</label><br>
-        <input type="text" name="designation" placeholder="e.g. Software Engineer, Supervisor" required>
-    </p>
-    
-    <p>
-        <label>Department:</label><br>
-        <input type="text" name="department" placeholder="e.g. IT, HR, Production" required>
-    </p>
-    
-    <p>
-        <label>Grade / Level:</label><br>
-        <input type="text" name="grade" placeholder="Grade/Level">
-    </p>
-    
-    <p>
-        <label>Employment Type:</label><br>
-        <select name="emp_type" required>
-            <option value="">--Select--</option>
-            <option value="Permanent">Permanent</option>
-            <option value="Contract">Contract</option>
-            <option value="Temporary">Temporary</option>
-            <option value="Part-Time">Part-Time</option>
-            <option value="Apprentice">Apprentice</option>
-            <option value="Intern">Intern</option>
-        </select>
-    </p>
-    
-    <p>
-        <label>Location / Branch:</label><br>
-        <input type="text" name="location" placeholder="Office/Factory Location">
-    </p>
-    
-    <p>
-        <label>Reporting Manager:</label><br>
-        <input type="text" name="reporting_manager" placeholder="Manager Name">
-    </p>
-    
-    <p>
-        <label>Previous Employment Details (if any):</label><br>
-        <textarea name="prev_employment" rows="2" cols="50" placeholder="Previous Employer, Designation, Period"></textarea>
-    </p>
-</fieldset>
+        <form action="#" method="post">
 
-<br>
+        <!-- ===== SECTION 1: PERSONAL DETAILS ===== -->
+        <div class="section-card" id="sec1">
+            <div class="section-header">
+                <div class="section-number">1</div>
+                <div class="section-title-text">
+                    <h3>Personal Details</h3>
+                    <p>Mandatory for all employee records as per Labour Law</p>
+                </div>
+                <button type="button" class="section-toggle">⌄</button>
+            </div>
+            <div class="section-body">
+                <div class="field-group">
+                    <label>Full Name (as per Aadhaar)</label>
+                    <input type="text" name="emp_name" placeholder="Enter full name" required>
+                </div>
+                <div class="field-group">
+                    <label>Father's / Spouse Name</label>
+                    <input type="text" name="father_name" placeholder="Enter father's or spouse name" required>
+                </div>
+                <div class="field-group">
+                    <label>Date of Birth</label>
+                    <input type="date" name="dob" required>
+                </div>
+                <div class="field-group">
+                    <label>Gender</label>
+                    <div class="radio-group">
+                        <label class="radio-option">
+                            <input type="radio" name="gender" value="Male" required>
+                            <span>Male</span>
+                        </label>
+                        <label class="radio-option">
+                            <input type="radio" name="gender" value="Female">
+                            <span>Female</span>
+                        </label>
+                        <label class="radio-option">
+                            <input type="radio" name="gender" value="Transgender">
+                            <span>Transgender</span>
+                        </label>
+                    </div>
+                </div>
+                <div class="field-group">
+                    <label>Marital Status</label>
+                    <select name="marital_status" required>
+                        <option value="">-- Select --</option>
+                        <option value="Single">Single</option>
+                        <option value="Married">Married</option>
+                        <option value="Divorced">Divorced</option>
+                        <option value="Widowed">Widowed</option>
+                    </select>
+                </div>
+                <div class="field-group">
+                    <label>Nationality</label>
+                    <input type="text" name="nationality" value="Indian" required>
+                </div>
+                <div class="field-group">
+                    <label>Religion (for ESI Family)</label>
+                    <input type="text" name="religion" placeholder="Enter religion">
+                </div>
+                <div class="field-group">
+                    <label>Category (SC/ST/OBC/General)</label>
+                    <select name="category">
+                        <option value="">-- Select --</option>
+                        <option value="General">General</option>
+                        <option value="SC">SC</option>
+                        <option value="ST">ST</option>
+                        <option value="OBC">OBC</option>
+                    </select>
+                </div>
+                <div class="field-group">
+                    <label>Educational Qualification</label>
+                    <input type="text" name="education" placeholder="Highest qualification">
+                </div>
+            </div>
+        </div>
 
-<!-- SECTION 4: BANK DETAILS (Mandatory for EPF/ESI/Salary) -->
-<fieldset>
-    <legend><b>4. BANK ACCOUNT DETAILS (Mandatory for EPF Withdrawal & Salary)</b></legend>
-    
-    <p>
-        <label>Bank Account Number:</label><br>
-        <input type="text" name="bank_acc" placeholder="Account Number" required>
-    </p>
-    
-    <p>
-        <label>Bank Name:</label><br>
-        <input type="text" name="bank_name" placeholder="e.g. State Bank of India" required>
-    </p>
-    
-    <p>
-        <label>IFSC Code:</label><br>
-        <input type="text" name="ifsc" maxlength="11" placeholder="SBIN0001234" required>
-    </p>
-    
-    <p>
-        <label>Branch Name:</label><br>
-        <input type="text" name="branch" placeholder="Branch Name">
-    </p>
-    
-    <p>
-        <label>Account Type:</label><br>
-        <select name="acc_type">
-            <option value="Savings">Savings</option>
-            <option value="Current">Current</option>
-        </select>
-    </p>
-    
-    <p>
-        <label>Bank Account is linked to Aadhaar (for UAN):</label><br>
-        <input type="radio" name="aadhaar_linked" value="Yes" required> Yes
-        <input type="radio" name="aadhaar_linked" value="No"> No
-    </p>
-</fieldset>
+        <!-- ===== SECTION 2: IDENTITY & ADDRESS PROOF ===== -->
+        <div class="section-card" id="sec2">
+            <div class="section-header">
+                <div class="section-number">2</div>
+                <div class="section-title-text">
+                    <h3>Identity & Address Proof</h3>
+                    <p>Statutory requirement for EPFO, ESIC & Income Tax</p>
+                </div>
+                <button type="button" class="section-toggle">⌄</button>
+            </div>
+            <div class="section-body">
+                <div class="field-group">
+                    <label>Aadhaar Number (12 digits)</label>
+                    <input type="text" name="aadhaar" maxlength="12" placeholder="XXXX XXXX XXXX" required>
+                </div>
+                <div class="field-group">
+                    <label>PAN Number (10 digits)</label>
+                    <input type="text" name="pan" maxlength="10" placeholder="ABCDE1234F" required>
+                </div>
+                <div class="field-group">
+                    <label>Other ID (Voter/Passport/DL)</label>
+                    <input type="text" name="other_id" placeholder="ID Number">
+                </div>
+                <div class="field-group">
+                    <label>Mobile Number</label>
+                    <input type="tel" name="mobile" maxlength="10" placeholder="10 digit mobile" required>
+                </div>
+                <div class="field-group">
+                    <label>Email ID</label>
+                    <input type="email" name="email" placeholder="employee@email.com" required>
+                </div>
+                <div class="field-group full-width">
+                    <label>Permanent Address (as per Aadhaar)</label>
+                    <textarea name="permanent_address" rows="2" placeholder="House No, Street, City, State, PIN Code" required></textarea>
+                </div>
+                <div class="field-group full-width">
+                    <label>Current / Communication Address</label>
+                    <textarea name="current_address" rows="2" placeholder="House No, Street, City, State, PIN Code" required></textarea>
+                </div>
+                <div class="field-group">
+                    <label>Photograph (for ESI Card)</label>
+                    <div class="file-upload">
+                        <label class="file-upload-label">
+                            <input type="file" name="photo" accept="image/*">
+                            <span class="upload-icon">📷</span>
+                            <span>Click to upload photo</span>
+                            <span class="upload-hint">JPG, PNG up to 2MB</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-<br>
+        <!-- ===== SECTION 3: EMPLOYMENT DETAILS ===== -->
+        <div class="section-card" id="sec3">
+            <div class="section-header">
+                <div class="section-number">3</div>
+                <div class="section-title-text">
+                    <h3>Employment Details</h3>
+                    <p>Shops & Establishment Act / Factory Act compliance</p>
+                </div>
+                <button type="button" class="section-toggle">⌄</button>
+            </div>
+            <div class="section-body">
+                <div class="field-group">
+                    <label>Employee Code / ID</label>
+                    <input type="text" name="emp_code" placeholder="EMP-XXXX" required>
+                </div>
+                <div class="field-group">
+                    <label>Date of Joining</label>
+                    <input type="date" name="doj" required>
+                </div>
+                <div class="field-group">
+                    <label>Designation</label>
+                    <input type="text" name="designation" placeholder="e.g. Software Engineer" required>
+                </div>
+                <div class="field-group">
+                    <label>Department</label>
+                    <input type="text" name="department" placeholder="e.g. IT, HR, Production" required>
+                </div>
+                <div class="field-group">
+                    <label>Grade / Level</label>
+                    <input type="text" name="grade" placeholder="Grade/Level">
+                </div>
+                <div class="field-group">
+                    <label>Employment Type</label>
+                    <select name="emp_type" required>
+                        <option value="">-- Select --</option>
+                        <option value="Permanent">Permanent</option>
+                        <option value="Contract">Contract</option>
+                        <option value="Temporary">Temporary</option>
+                        <option value="Part-Time">Part-Time</option>
+                        <option value="Apprentice">Apprentice</option>
+                        <option value="Intern">Intern</option>
+                    </select>
+                </div>
+                <div class="field-group">
+                    <label>Location / Branch</label>
+                    <input type="text" name="location" placeholder="Office/Factory Location">
+                </div>
+                <div class="field-group">
+                    <label>Reporting Manager</label>
+                    <input type="text" name="reporting_manager" placeholder="Manager Name">
+                </div>
+                <div class="field-group full-width">
+                    <label>Previous Employment Details</label>
+                    <textarea name="prev_employment" rows="2" placeholder="Previous Employer, Designation, Period"></textarea>
+                </div>
+            </div>
+        </div>
 
-<!-- SECTION 5: STATUTORY REGISTRATION NUMBERS (EPFO / ESIC) -->
-<fieldset>
-    <legend><b>5. STATUTORY REGISTRATION NUMBERS (EPFO & ESIC)</b></legend>
-    
-    <p><b>EPFO Details:</b></p>
-    <p>
-        <label>Universal Account Number (UAN) - 12 digits:</label><br>
-        <input type="text" name="uan" maxlength="12" placeholder="UAN (if already allotted)">
-    </p>
-    
-    <p>
-        <label>Previous Member ID (if PF transfer needed):</label><br>
-        <input type="text" name="prev_member_id" placeholder="Previous PF Member ID">
-    </p>
-    
-    <p><b>ESIC Details:</b></p>
-    <p>
-        <label>Insurance Number (IP Number) - if already registered:</label><br>
-        <input type="text" name="esic_ip" placeholder="ESIC IP Number">
-    </p>
-    
-    <p>
-        <label>ESI Temporary Insurance Number (TIN) - if new:</label><br>
-        <input type="text" name="esic_tin" placeholder="TIN (for new employees)">
-    </p>
-</fieldset>
+        <!-- ===== SECTION 4: BANK DETAILS ===== -->
+        <div class="section-card" id="sec4">
+            <div class="section-header">
+                <div class="section-number">4</div>
+                <div class="section-title-text">
+                    <h3>Bank Account Details</h3>
+                    <p>Mandatory for EPF withdrawal & salary credit</p>
+                </div>
+                <button type="button" class="section-toggle">⌄</button>
+            </div>
+            <div class="section-body">
+                <div class="field-group">
+                    <label>Bank Account Number</label>
+                    <input type="text" name="bank_acc" placeholder="Account Number" required>
+                </div>
+                <div class="field-group">
+                    <label>Bank Name</label>
+                    <input type="text" name="bank_name" placeholder="e.g. State Bank of India" required>
+                </div>
+                <div class="field-group">
+                    <label>IFSC Code</label>
+                    <input type="text" name="ifsc" maxlength="11" placeholder="SBIN0001234" required>
+                </div>
+                <div class="field-group">
+                    <label>Branch Name</label>
+                    <input type="text" name="branch" placeholder="Branch Name">
+                </div>
+                <div class="field-group">
+                    <label>Account Type</label>
+                    <select name="acc_type">
+                        <option value="Savings">Savings</option>
+                        <option value="Current">Current</option>
+                    </select>
+                </div>
+                <div class="field-group">
+                    <label>Aadhaar Linked to Bank?</label>
+                    <div class="radio-group">
+                        <label class="radio-option">
+                            <input type="radio" name="aadhaar_linked" value="Yes" required>
+                            <span>Yes</span>
+                        </label>
+                        <label class="radio-option">
+                            <input type="radio" name="aadhaar_linked" value="No">
+                            <span>No</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-<br>
+        <!-- ===== SECTION 5: STATUTORY REGISTRATION ===== -->
+        <div class="section-card" id="sec5">
+            <div class="section-header">
+                <div class="section-number">5</div>
+                <div class="section-title-text">
+                    <h3>Statutory Registration Numbers</h3>
+                    <p>EPFO & ESIC registration details</p>
+                </div>
+                <button type="button" class="section-toggle">⌄</button>
+            </div>
+            <div class="section-body">
+                <div class="field-group">
+                    <label>UAN (12 digits) - if allotted</label>
+                    <input type="text" name="uan" maxlength="12" placeholder="Universal Account Number">
+                </div>
+                <div class="field-group">
+                    <label>Previous Member ID (PF Transfer)</label>
+                    <input type="text" name="prev_member_id" placeholder="Previous PF Member ID">
+                </div>
+                <div class="field-group">
+                    <label>ESIC IP Number (if registered)</label>
+                    <input type="text" name="esic_ip" placeholder="Insurance Number">
+                </div>
+                <div class="field-group">
+                    <label>ESIC TIN (for new employees)</label>
+                    <input type="text" name="esic_tin" placeholder="Temporary Insurance Number">
+                </div>
+            </div>
+        </div>
 
-<!-- SECTION 6: SALARY & WAGE DETAILS (Mandatory for PF/ESI/TDS) -->
-<fieldset>
-    <legend><b>6. SALARY & WAGE DETAILS (For EPF, ESI & TDS Compliance)</b></legend>
-    
-    <p>
-        <label>Basic Salary + Dearness Allowance (For PF Calculation):</label><br>
-        <input type="number" name="basic_da" placeholder="Amount in INR" required>
-    </p>
-    
-    <p>
-        <label>Gross Monthly Wages (For ESI Calculation):</label><br>
-        <input type="number" name="gross_wages" placeholder="Amount in INR" required>
-    </p>
-    
-    <p>
-        <label>House Rent Allowance (HRA):</label><br>
-        <input type="number" name="hra" placeholder="Amount in INR">
-    </p>
-    
-    <p>
-        <label>Conveyance Allowance:</label><br>
-        <input type="number" name="conveyance" placeholder="Amount in INR">
-    </p>
-    
-    <p>
-        <label>Medical Allowance:</label><br>
-        <input type="number" name="medical" placeholder="Amount in INR">
-    </p>
-    
-    <p>
-        <label>Special Allowance:</label><br>
-        <input type="number" name="special" placeholder="Amount in INR">
-    </p>
-    
-    <p>
-        <label>City Compensatory Allowance:</label><br>
-        <input type="number" name="cca" placeholder="Amount in INR">
-    </p>
-    
-    <p>
-        <label>Other Allowances:</label><br>
-        <input type="number" name="other_allow" placeholder="Amount in INR">
-    </p>
-    
-    <p>
-        <label>Total Monthly Salary:</label><br>
-        <input type="number" name="total_salary" placeholder="Amount in INR" required>
-    </p>
-    
-    <p>
-        <label>Cost to Company (CTC) - Annual:</label><br>
-        <input type="number" name="ctc" placeholder="Annual CTC in INR">
-    </p>
-    
-    <p>
-        <label>Is Employee covered under ESI? (Gross <= Rs.21,000):</label><br>
-        <input type="radio" name="esi_applicable" value="Yes" required> Yes
-        <input type="radio" name="esi_applicable" value="No"> No
-    </p>
-    
-    <p>
-        <label>Is Employee covered under EPF? (Basic+DA any amount, mandatory if establishment has 20+ employees):</label><br>
-        <input type="radio" name="pf_applicable" value="Yes" required> Yes
-        <input type="radio" name="pf_applicable" value="No"> No
-    </p>
-</fieldset>
+        <!-- ===== SECTION 6: SALARY & WAGE DETAILS ===== -->
+        <div class="section-card" id="sec6">
+            <div class="section-header">
+                <div class="section-number">6</div>
+                <div class="section-title-text">
+                    <h3>Salary & Wage Details</h3>
+                    <p>For EPF, ESI & TDS compliance</p>
+                </div>
+                <button type="button" class="section-toggle">⌄</button>
+            </div>
+            <div class="section-body">
+                <div class="field-group">
+                    <label>Basic + DA (For PF)</label>
+                    <input type="number" name="basic_da" placeholder="Amount in INR" required>
+                </div>
+                <div class="field-group">
+                    <label>Gross Monthly Wages (For ESI)</label>
+                    <input type="number" name="gross_wages" placeholder="Amount in INR" required>
+                </div>
+                <div class="field-group">
+                    <label>House Rent Allowance (HRA)</label>
+                    <input type="number" name="hra" placeholder="Amount in INR">
+                </div>
+                <div class="field-group">
+                    <label>Conveyance Allowance</label>
+                    <input type="number" name="conveyance" placeholder="Amount in INR">
+                </div>
+                <div class="field-group">
+                    <label>Medical Allowance</label>
+                    <input type="number" name="medical" placeholder="Amount in INR">
+                </div>
+                <div class="field-group">
+                    <label>Special Allowance</label>
+                    <input type="number" name="special" placeholder="Amount in INR">
+                </div>
+                <div class="field-group">
+                    <label>City Compensatory Allowance</label>
+                    <input type="number" name="cca" placeholder="Amount in INR">
+                </div>
+                <div class="field-group">
+                    <label>Other Allowances</label>
+                    <input type="number" name="other_allow" placeholder="Amount in INR">
+                </div>
+                <div class="field-group">
+                    <label>Total Monthly Salary</label>
+                    <input type="number" name="total_salary" placeholder="Amount in INR" required>
+                </div>
+                <div class="field-group">
+                    <label>Annual CTC</label>
+                    <input type="number" name="ctc" placeholder="Annual CTC in INR">
+                </div>
+                <div class="field-group">
+                    <label>ESI Applicable? (Gross <= Rs.21,000)</label>
+                    <div class="radio-group">
+                        <label class="radio-option">
+                            <input type="radio" name="esi_applicable" value="Yes" required>
+                            <span>Yes</span>
+                        </label>
+                        <label class="radio-option">
+                            <input type="radio" name="esi_applicable" value="No">
+                            <span>No</span>
+                        </label>
+                    </div>
+                </div>
+                <div class="field-group">
+                    <label>EPF Applicable?</label>
+                    <div class="radio-group">
+                        <label class="radio-option">
+                            <input type="radio" name="pf_applicable" value="Yes" required>
+                            <span>Yes</span>
+                        </label>
+                        <label class="radio-option">
+                            <input type="radio" name="pf_applicable" value="No">
+                            <span>No</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-<br>
+        <!-- ===== SECTION 7: NOMINEE DETAILS ===== -->
+        <div class="section-card" id="sec7">
+            <div class="section-header">
+                <div class="section-number">7</div>
+                <div class="section-title-text">
+                    <h3>Nominee Details</h3>
+                    <p>Mandatory for EPF Form 2 & ESIC</p>
+                </div>
+                <button type="button" class="section-toggle">⌄</button>
+            </div>
+            <div class="section-body">
+                <div class="field-group">
+                    <label>Nominee Full Name</label>
+                    <input type="text" name="nominee_name" placeholder="Nominee name" required>
+                </div>
+                <div class="field-group">
+                    <label>Relationship</label>
+                    <select name="nominee_relation" required>
+                        <option value="">-- Select --</option>
+                        <option value="Spouse">Spouse</option>
+                        <option value="Father">Father</option>
+                        <option value="Mother">Mother</option>
+                        <option value="Son">Son</option>
+                        <option value="Daughter">Daughter</option>
+                        <option value="Brother">Brother</option>
+                        <option value="Sister">Sister</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+                <div class="field-group full-width">
+                    <label>Nominee Address</label>
+                    <textarea name="nominee_address" rows="2" placeholder="Nominee address"></textarea>
+                </div>
+                <div class="field-group">
+                    <label>Nominee Mobile</label>
+                    <input type="tel" name="nominee_mobile" maxlength="10" placeholder="10 digit number">
+                </div>
+                <div class="field-group">
+                    <label>Share Percentage</label>
+                    <input type="number" name="nominee_share" placeholder="e.g. 100" required>
+                </div>
+            </div>
+        </div>
 
-<!-- SECTION 7: NOMINEE DETAILS (Mandatory for EPF & ESI) -->
-<fieldset>
-    <legend><b>7. NOMINEE DETAILS (Mandatory for EPF Form 2 & ESI)</b></legend>
-    
-    <p>
-        <label>Nominee Name:</label><br>
-        <input type="text" name="nominee_name" placeholder="Nominee Full Name" required>
-    </p>
-    
-    <p>
-        <label>Relationship with Employee:</label><br>
-        <select name="nominee_relation" required>
-            <option value="">--Select--</option>
-            <option value="Spouse">Spouse</option>
-            <option value="Father">Father</option>
-            <option value="Mother">Mother</option>
-            <option value="Son">Son</option>
-            <option value="Daughter">Daughter</option>
-            <option value="Brother">Brother</option>
-            <option value="Sister">Sister</option>
-            <option value="Other">Other</option>
-        </select>
-    </p>
-    
-    <p>
-        <label>Nominee Address:</label><br>
-        <textarea name="nominee_address" rows="2" cols="50" placeholder="Nominee Address"></textarea>
-    </p>
-    
-    <p>
-        <label>Nominee Mobile Number:</label><br>
-        <input type="tel" name="nominee_mobile" maxlength="10" placeholder="10 Digit Number">
-    </p>
-    
-    <p>
-        <label>Percentage of Share:</label><br>
-        <input type="number" name="nominee_share" placeholder="e.g. 100" required>
-    </p>
-</fieldset>
+        <!-- ===== SECTION 8: FAMILY DETAILS ===== -->
+        <div class="section-card" id="sec8">
+            <div class="section-header">
+                <div class="section-number">8</div>
+                <div class="section-title-text">
+                    <h3>Family Details</h3>
+                    <p>Mandatory for ESIC Medical Coverage</p>
+                </div>
+                <button type="button" class="section-toggle">⌄</button>
+            </div>
+            <div class="section-body">
+                <div class="field-group">
+                    <label>Spouse Name</label>
+                    <input type="text" name="spouse_name" placeholder="Spouse name">
+                </div>
+                <div class="field-group">
+                    <label>Spouse Date of Birth</label>
+                    <input type="date" name="spouse_dob">
+                </div>
+                <div class="field-group">
+                    <label>Child 1 Name</label>
+                    <input type="text" name="child1_name" placeholder="Child name">
+                </div>
+                <div class="field-group">
+                    <label>Child 1 DOB</label>
+                    <input type="date" name="child1_dob">
+                </div>
+                <div class="field-group">
+                    <label>Child 1 Gender</label>
+                    <div class="radio-group">
+                        <label class="radio-option">
+                            <input type="radio" name="child1_gender" value="Male">
+                            <span>Male</span>
+                        </label>
+                        <label class="radio-option">
+                            <input type="radio" name="child1_gender" value="Female">
+                            <span>Female</span>
+                        </label>
+                    </div>
+                </div>
+                <div class="field-group">
+                    <label>Child 2 Name</label>
+                    <input type="text" name="child2_name" placeholder="Child name">
+                </div>
+                <div class="field-group">
+                    <label>Child 2 DOB</label>
+                    <input type="date" name="child2_dob">
+                </div>
+                <div class="field-group">
+                    <label>Dependent Father</label>
+                    <input type="text" name="dep_father" placeholder="Father's name if dependent">
+                </div>
+                <div class="field-group">
+                    <label>Dependent Mother</label>
+                    <input type="text" name="dep_mother" placeholder="Mother's name if dependent">
+                </div>
+            </div>
+        </div>
 
-<br>
+        <!-- ===== SECTION 9: INCOME TAX DETAILS ===== -->
+        <div class="section-card" id="sec9">
+            <div class="section-header">
+                <div class="section-number">9</div>
+                <div class="section-title-text">
+                    <h3>Income Tax Details</h3>
+                    <p>TDS Compliance under Section 192</p>
+                </div>
+                <button type="button" class="section-toggle">⌄</button>
+            </div>
+            <div class="section-body">
+                <div class="field-group">
+                    <label>Tax Regime</label>
+                    <select name="tax_regime">
+                        <option value="Old">Old Regime</option>
+                        <option value="New">New Regime</option>
+                    </select>
+                </div>
+                <div class="field-group">
+                    <label>PAN (for TDS)</label>
+                    <input type="text" name="pan_tds" maxlength="10" placeholder="ABCDE1234F" required>
+                </div>
+                <div class="field-group">
+                    <label>Previous Employer Income</label>
+                    <input type="number" name="prev_income" placeholder="Amount in INR">
+                </div>
+                <div class="field-group full-width">
+                    <label>Investment Declaration (80C, 80D, etc.)</label>
+                    <textarea name="investments" rows="2" placeholder="Tax saving investments details"></textarea>
+                </div>
+                <div class="field-group full-width">
+                    <label>HRA Exemption - Rent Details</label>
+                    <textarea name="rent_details" rows="2" placeholder="Landlord name, address, PAN (if rent > 1 lakh/year)"></textarea>
+                </div>
+                <div class="field-group">
+                    <label>Form 16 Required</label>
+                    <div class="radio-group">
+                        <label class="radio-option">
+                            <input type="radio" name="form16" value="Yes" checked>
+                            <span>Yes</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-<!-- SECTION 8: FAMILY DETAILS (Mandatory for ESI Medical Benefits) -->
-<fieldset>
-    <legend><b>8. FAMILY DETAILS (Mandatory for ESIC Medical Coverage)</b></legend>
-    
-    <p><b>Spouse Details:</b></p>
-    <p>
-        <label>Spouse Name:</label><br>
-        <input type="text" name="spouse_name" placeholder="Spouse Name">
-    </p>
-    <p>
-        <label>Spouse Date of Birth:</label><br>
-        <input type="date" name="spouse_dob">
-    </p>
-    
-    <p><b>Children Details:</b></p>
-    <p>
-        <label>Child 1 Name:</label><br>
-        <input type="text" name="child1_name" placeholder="Child Name">
-    </p>
-    <p>
-        <label>Child 1 Date of Birth:</label><br>
-        <input type="date" name="child1_dob">
-    </p>
-    <p>
-        <label>Child 1 Gender:</label><br>
-        <input type="radio" name="child1_gender" value="Male"> Male
-        <input type="radio" name="child1_gender" value="Female"> Female
-    </p>
-    
-    <p>
-        <label>Child 2 Name:</label><br>
-        <input type="text" name="child2_name" placeholder="Child Name">
-    </p>
-    <p>
-        <label>Child 2 Date of Birth:</label><br>
-        <input type="date" name="child2_dob">
-    </p>
-    
-    <p><b>Dependent Parents (for ESI):</b></p>
-    <p>
-        <label>Father's Name (if dependent):</label><br>
-        <input type="text" name="dep_father" placeholder="Father's Name">
-    </p>
-    <p>
-        <label>Mother's Name (if dependent):</label><br>
-        <input type="text" name="dep_mother" placeholder="Mother's Name">
-    </p>
-</fieldset>
+        <!-- ===== SECTION 10: ATTENDANCE & LEAVE ===== -->
+        <div class="section-card" id="sec10">
+            <div class="section-header">
+                <div class="section-number">10</div>
+                <div class="section-title-text">
+                    <h3>Attendance & Leave Records</h3>
+                    <p>Mandatory under Labour Laws</p>
+                </div>
+                <button type="button" class="section-toggle">⌄</button>
+            </div>
+            <div class="section-body">
+                <div class="field-group">
+                    <label>Weekly Off Day</label>
+                    <select name="weekly_off" required>
+                        <option value="Sunday">Sunday</option>
+                        <option value="Monday">Monday</option>
+                        <option value="Tuesday">Tuesday</option>
+                        <option value="Wednesday">Wednesday</option>
+                        <option value="Thursday">Thursday</option>
+                        <option value="Friday">Friday</option>
+                        <option value="Saturday">Saturday</option>
+                    </select>
+                </div>
+                <div class="field-group">
+                    <label>Shift Timing</label>
+                    <input type="text" name="shift" placeholder="e.g. 9:00 AM - 6:00 PM">
+                </div>
+                <div class="field-group">
+                    <label>Working Hours/Day</label>
+                    <input type="number" name="working_hours" placeholder="Hours" required>
+                </div>
+                <div class="field-group">
+                    <label>Weekly Working Days</label>
+                    <input type="number" name="working_days" value="5" required>
+                </div>
+                <div class="field-group">
+                    <label>Earned Leave Balance</label>
+                    <input type="number" name="earned_leave" placeholder="Days">
+                </div>
+                <div class="field-group">
+                    <label>Casual Leave Balance</label>
+                    <input type="number" name="casual_leave" placeholder="Days">
+                </div>
+                <div class="field-group">
+                    <label>Sick Leave Balance</label>
+                    <input type="number" name="sick_leave" placeholder="Days">
+                </div>
+                <div class="field-group">
+                    <label>Maternity Leave Eligible</label>
+                    <div class="radio-group">
+                        <label class="radio-option">
+                            <input type="radio" name="maternity" value="Yes">
+                            <span>Yes</span>
+                        </label>
+                        <label class="radio-option">
+                            <input type="radio" name="maternity" value="No">
+                            <span>No</span>
+                        </label>
+                        <label class="radio-option">
+                            <input type="radio" name="maternity" value="NA">
+                            <span>N/A</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-<br>
+        <!-- ===== SECTION 11: CONTRACT WORKER ===== -->
+        <div class="section-card" id="sec11">
+            <div class="section-header">
+                <div class="section-number">11</div>
+                <div class="section-title-text">
+                    <h3>Contract Worker Details</h3>
+                    <p>If applicable under Contract Labour Act, 1970</p>
+                </div>
+                <button type="button" class="section-toggle">⌄</button>
+            </div>
+            <div class="section-body">
+                <div class="field-group">
+                    <label>Is Contract Worker?</label>
+                    <div class="radio-group">
+                        <label class="radio-option">
+                            <input type="radio" name="is_contract" value="Yes">
+                            <span>Yes</span>
+                        </label>
+                        <label class="radio-option">
+                            <input type="radio" name="is_contract" value="No" checked>
+                            <span>No</span>
+                        </label>
+                    </div>
+                </div>
+                <div class="field-group">
+                    <label>Principal Employer Name</label>
+                    <input type="text" name="principal_employer" placeholder="Principal employer">
+                </div>
+                <div class="field-group">
+                    <label>Contractor Name & License</label>
+                    <input type="text" name="contractor" placeholder="Contractor details">
+                </div>
+                <div class="field-group">
+                    <label>Nature of Work</label>
+                    <input type="text" name="work_nature" placeholder="Nature of contract work">
+                </div>
+            </div>
+        </div>
 
-<!-- SECTION 9: INCOME TAX DETAILS (TDS - Section 192) -->
-<fieldset>
-    <legend><b>9. INCOME TAX DETAILS (For TDS Compliance u/s 192)</b></legend>
-    
-    <p>
-        <label>Tax Regime:</label><br>
-        <select name="tax_regime">
-            <option value="Old">Old Regime</option>
-            <option value="New">New Regime</option>
-        </select>
-    </p>
-    
-    <p>
-        <label>Permanent Account Number (PAN) - (Repeated for TDS):</label><br>
-        <input type="text" name="pan_tds" maxlength="10" placeholder="ABCDE1234F" required>
-    </p>
-    
-    <p>
-        <label>Investment Declaration (80C, 80D, etc.):</label><br>
-        <textarea name="investments" rows="2" cols="50" placeholder="Details of tax saving investments"></textarea>
-    </p>
-    
-    <p>
-        <label>HRA Exemption - Rent Paid Details:</label><br>
-        <textarea name="rent_details" rows="2" cols="50" placeholder="Landlord Name, Address, PAN (if rent > 1 lakh/year)"></textarea>
-    </p>
-    
-    <p>
-        <label>Previous Employer Income (if joined mid-year):</label><br>
-        <input type="number" name="prev_income" placeholder="Amount in INR">
-    </p>
-    
-    <p>
-        <label>Form 16 / Form 12BA Required:</label><br>
-        <input type="radio" name="form16" value="Yes" checked> Yes
-    </p>
-</fieldset>
+        <!-- ===== SECTION 12: DECLARATION ===== -->
+        <div class="section-card" id="sec12">
+            <div class="section-header">
+                <div class="section-number">12</div>
+                <div class="section-title-text">
+                    <h3>Employee Declaration</h3>
+                    <p>Final confirmation & signatures</p>
+                </div>
+                <button type="button" class="section-toggle">⌄</button>
+            </div>
+            <div class="section-body">
+                <div class="field-group full-width">
+                    <label class="checkbox-option">
+                        <input type="checkbox" name="declare1" required>
+                        <span>I hereby declare that all information provided above is true and correct to the best of my knowledge.</span>
+                    </label>
+                </div>
+                <div class="field-group full-width">
+                    <label class="checkbox-option">
+                        <input type="checkbox" name="declare2" required>
+                        <span>I consent to sharing my Aadhaar details with EPFO/ESIC for UAN generation and verification.</span>
+                    </label>
+                </div>
+                <div class="field-group full-width">
+                    <label class="checkbox-option">
+                        <input type="checkbox" name="declare3">
+                        <span>I opt for EPF coverage voluntarily (if salary above Rs.15,000 or establishment has <20 employees).</span>
+                    </label>
+                </div>
+                <div class="field-group">
+                    <label>Declaration Date</label>
+                    <input type="date" name="declare_date" required>
+                </div>
+                <div class="field-group">
+                    <label>Employee Signature</label>
+                    <div class="file-upload">
+                        <label class="file-upload-label">
+                            <input type="file" name="emp_sign" accept="image/*">
+                            <span class="upload-icon">✍️</span>
+                            <span>Upload signature</span>
+                            <span class="upload-hint">PNG, JPG</span>
+                        </label>
+                    </div>
+                </div>
+                <div class="field-group">
+                    <label>Authorized Signatory</label>
+                    <input type="text" name="auth_sign" placeholder="Name & Designation" required>
+                </div>
+            </div>
+        </div>
 
-<br>
+        <!-- ===== FORM ACTIONS ===== -->
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary">Submit Employee Record</button>
+            <button type="reset" class="btn btn-secondary">Reset Form</button>
+        </div>
 
-<!-- SECTION 10: ATTENDANCE & LEAVE RECORDS (Factory Act / Shops Act) -->
-<fieldset>
-    <legend><b>10. ATTENDANCE & LEAVE RECORDS (Mandatory under Labour Laws)</b></legend>
-    
-    <p>
-        <label>Weekly Off Day:</label><br>
-        <select name="weekly_off" required>
-            <option value="Sunday">Sunday</option>
-            <option value="Monday">Monday</option>
-            <option value="Tuesday">Tuesday</option>
-            <option value="Wednesday">Wednesday</option>
-            <option value="Thursday">Thursday</option>
-            <option value="Friday">Friday</option>
-            <option value="Saturday">Saturday</option>
-        </select>
-    </p>
-    
-    <p>
-        <label>Shift Timing:</label><br>
-        <input type="text" name="shift" placeholder="e.g. 9:00 AM - 6:00 PM">
-    </p>
-    
-    <p>
-        <label>Total Working Hours per Day:</label><br>
-        <input type="number" name="working_hours" placeholder="Hours" required>
-    </p>
-    
-    <p>
-        <label>Weekly Working Days:</label><br>
-        <input type="number" name="working_days" value="5" required>
-    </p>
-    
-    <p>
-        <label>Leave Balance - Earned Leave:</label><br>
-        <input type="number" name="earned_leave" placeholder="Days">
-    </p>
-    
-    <p>
-        <label>Leave Balance - Casual Leave:</label><br>
-        <input type="number" name="casual_leave" placeholder="Days">
-    </p>
-    
-    <p>
-        <label>Leave Balance - Sick Leave:</label><br>
-        <input type="number" name="sick_leave" placeholder="Days">
-    </p>
-    
-    <p>
-        <label>Maternity Leave Eligible (for Female Employees):</label><br>
-        <input type="radio" name="maternity" value="Yes"> Yes
-        <input type="radio" name="maternity" value="No"> No
-        <input type="radio" name="maternity" value="NA"> N/A
-    </p>
-</fieldset>
+        </form>
 
-<br>
+        <!-- ===== LEGAL REFERENCE TABLE ===== -->
+        <div class="legal-section">
+            <h3>📋 Legal Reference Summary</h3>
+            <table class="legal-table">
+                <tr>
+                    <th>Act / Law</th>
+                    <th>Required Details</th>
+                    <th>Purpose</th>
+                </tr>
+                <tr>
+                    <td>EPF & MP Act, 1952</td>
+                    <td>Aadhaar, PAN, Bank, DOB, DOJ, Basic+DA, Nominee</td>
+                    <td>UAN, ECR, Pension</td>
+                </tr>
+                <tr>
+                    <td>ESI Act, 1948</td>
+                    <td>Aadhaar, Family, Photo, Gross Wages, Nominee</td>
+                    <td>IP Registration, Medical</td>
+                </tr>
+                <tr>
+                    <td>Income Tax Act, 1961</td>
+                    <td>PAN, Salary Breakup, Investments, Rent</td>
+                    <td>TDS u/s 192, Form 16</td>
+                </tr>
+                <tr>
+                    <td>Shops & Establishment Act</td>
+                    <td>Working Hours, Weekly Off, Leave, Attendance</td>
+                    <td>Labour Compliance</td>
+                </tr>
+                <tr>
+                    <td>Contract Labour Act, 1970</td>
+                    <td>Contractor, Principal Employer, Work Nature</td>
+                    <td>Contract Registration</td>
+                </tr>
+                <tr>
+                    <td>Maternity Benefit Act, 1961</td>
+                    <td>Gender, Marital Status, Maternity Eligibility</td>
+                    <td>26 Weeks Leave</td>
+                </tr>
+                <tr>
+                    <td>Payment of Wages Act, 1936</td>
+                    <td>Bank Account, Wage Register, Designation</td>
+                    <td>Salary Payment Record</td>
+                </tr>
+            </table>
+        </div>
 
-<!-- SECTION 11: CONTRACT WORKER DETAILS (If Applicable) -->
-<fieldset>
-    <legend><b>11. CONTRACT WORKER DETAILS (If applicable under Contract Labour Act)</b></legend>
-    
-    <p>
-        <label>Is Contract Worker?</label><br>
-        <input type="radio" name="is_contract" value="Yes"> Yes
-        <input type="radio" name="is_contract" value="No" checked> No
-    </p>
-    
-    <p>
-        <label>Principal Employer Name:</label><br>
-        <input type="text" name="principal_employer" placeholder="Principal Employer">
-    </p>
-    
-    <p>
-        <label>Contractor Name & License Number:</label><br>
-        <input type="text" name="contractor" placeholder="Contractor Details">
-    </p>
-    
-    <p>
-        <label>Nature of Work:</label><br>
-        <input type="text" name="work_nature" placeholder="Nature of Contract Work">
-    </p>
-</fieldset>
-
-<br>
-
-<!-- SECTION 12: DECLARATION -->
-<fieldset>
-    <legend><b>12. EMPLOYEE DECLARATION</b></legend>
-    
-    <p>
-        <input type="checkbox" name="declare1" required>
-        I hereby declare that all the information provided above is true and correct to the best of my knowledge.
-    </p>
-    
-    <p>
-        <input type="checkbox" name="declare2" required>
-        I consent to the sharing of my Aadhaar details with EPFO/ESIC for UAN generation and verification.
-    </p>
-    
-    <p>
-        <input type="checkbox" name="declare3">
-        I opt for EPF coverage voluntarily (if salary above Rs.15,000 or establishment has <20 employees).
-    </p>
-    
-    <p>
-        <label>Date:</label><br>
-        <input type="date" name="declare_date" required>
-    </p>
-    
-    <p>
-        <label>Employee Signature:</label><br>
-        <input type="file" name="emp_sign" accept="image/*">
-    </p>
-    
-    <p>
-        <label>Employer Authorized Signatory:</label><br>
-        <input type="text" name="auth_sign" placeholder="Authorized Person Name & Designation" required>
-    </p>
-</fieldset>
-
-<br>
-
-<p>
-    <button type="submit">SUBMIT EMPLOYEE RECORD</button>
-    <button type="reset">RESET FORM</button>
-</p>
-
-</form>
-
-<hr>
-
-<h3>LEGAL REFERENCE SUMMARY</h3>
-<table border="1" cellpadding="5" cellspacing="0">
-    <tr>
-        <th>Law / Act</th>
-        <th>Required Details</th>
-        <th>Purpose</th>
-    </tr>
-    <tr>
-        <td>EPF & MP Act, 1952</td>
-        <td>Aadhaar, PAN, Bank Details, DOB, DOJ, Basic+DA, Nominee</td>
-        <td>UAN Generation, Monthly ECR, Pension, Insurance</td>
-    </tr>
-    <tr>
-        <td>ESI Act, 1948</td>
-        <td>Aadhaar, Family Details, Photo, Gross Wages, Nominee, DOB</td>
-        <td>IP Registration, Medical Benefits, TIN/IP Number</td>
-    </tr>
-    <tr>
-        <td>Income Tax Act, 1961</td>
-        <td>PAN, Salary Breakup, Investments, Rent Details, Previous Income</td>
-        <td>TDS Deduction u/s 192, Form 16 Issuance</td>
-    </tr>
-    <tr>
-        <td>Shops & Establishment Act</td>
-        <td>Working Hours, Weekly Off, Leave Records, Attendance</td>
-        <td>Labour Compliance, Working Conditions</td>
-    </tr>
-    <tr>
-        <td>Contract Labour Act, 1970</td>
-        <td>Contractor Details, Principal Employer, Nature of Work</td>
-        <td>Contract Worker Registration</td>
-    </tr>
-    <tr>
-        <td>Maternity Benefit Act, 1961</td>
-        <td>Gender, Marital Status, Maternity Leave Eligibility</td>
-        <td>Maternity Leave & Benefits (26 weeks)</td>
-    </tr>
-    <tr>
-        <td>Payment of Wages Act, 1936</td>
-        <td>Bank Account, Wage Register, Designation</td>
-        <td>Salary Payment Record, Wage Slip</td>
-    </tr>
-</table>
+    </div>
+</div>
 
 </body>
 </html>
