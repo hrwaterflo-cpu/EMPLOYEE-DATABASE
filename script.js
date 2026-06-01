@@ -9,7 +9,6 @@ const CONFIG = {
 
 // ============== STATE ==============
 let employees = [];
-let isLoading = false;
 
 // ============== DOM ELEMENTS ==============
 const form = document.getElementById('employeeForm');
@@ -38,49 +37,85 @@ function saveToken() {
     if (token) {
         localStorage.setItem('github_token', token);
         showMessage('Token saved in browser!', 'success');
+        // Token save hone ke baad immediately load karo
+        loadEmployees();
     } else {
         showMessage('Please enter a token first!', 'error');
     }
 }
 
-// ============== STEP 1: LOAD DATA FROM GITHUB ==============
+// ============== GET TOKEN ==============
+function getToken() {
+    return tokenInput.value.trim() || localStorage.getItem('github_token');
+}
+
+// ============== STEP 1: LOAD DATA FROM GITHUB API (NO CACHE!) ==============
 async function loadEmployees() {
     showLoading();
+
+    const token = getToken();
+
     try {
-        // CACHE-BUSTING: Add timestamp to bypass CDN cache
-        // Ye har request unique banata hai, isliye cache nahi lagta
-        const timestamp = new Date().getTime();
-        const url = `https://raw.githubusercontent.com/${CONFIG.OWNER}/${CONFIG.REPO}/${CONFIG.BRANCH}/${CONFIG.FILE_PATH}?nocache=${timestamp}`;
+        let data;
 
-        const response = await fetch(url, {
-            cache: 'no-store',  // Browser cache bhi disable karo
-            headers: {
-                'Cache-Control': 'no-cache',
-                'Pragma': 'no-cache'
+        if (token) {
+            // ✅ METHOD 1: GitHub API se fetch (NO CACHE - REALTIME!)
+            // API se data fetch karne pe CDN cache nahi lagta
+            const apiUrl = `https://api.github.com/repos/${CONFIG.OWNER}/${CONFIG.REPO}/contents/${CONFIG.FILE_PATH}?ref=${CONFIG.BRANCH}`;
+
+            const response = await fetch(apiUrl, {
+                headers: {
+                    'Authorization': `token ${token}`,
+                    'Accept': 'application/vnd.github.v3+json'
+                }
+            });
+
+            if (response.ok) {
+                const fileData = await response.json();
+                // Content Base64 mein hota hai, decode karna padega
+                const content = atob(fileData.content.replace(/\s/g, ''));
+                data = JSON.parse(content);
+                console.log('✅ Data loaded via GitHub API (Real-time)');
+            } else if (response.status === 404) {
+                // File exist nahi karti
+                console.log('File not found, creating empty list');
+                data = { employees: [] };
+            } else {
+                throw new Error(`API Error: ${response.status}`);
             }
-        });
+        } else {
+            // ⚠️ METHOD 2: Without token - raw URL (CACHE LAGEGA!)
+            // Ye sirf pehli baar ke liye hai, token ke bina cache issue rahega
+            const timestamp = new Date().getTime();
+            const rawUrl = `https://raw.githubusercontent.com/${CONFIG.OWNER}/${CONFIG.REPO}/${CONFIG.BRANCH}/${CONFIG.FILE_PATH}?nocache=${timestamp}`;
 
-        if (!response.ok) {
-            console.log('First time load or file missing');
-            employees = [];
-            renderEmployees();
-            return;
+            const response = await fetch(rawUrl, { cache: 'no-store' });
+
+            if (response.ok) {
+                data = await response.json();
+                console.log('⚠️ Data loaded via raw URL (May be cached!)');
+            } else {
+                data = { employees: [] };
+            }
         }
 
-        const data = await response.json();
         employees = data.employees || [];
         renderEmployees();
 
     } catch (error) {
-        console.log('Error loading:', error);
+        console.error('Error loading:', error);
         employees = [];
         renderEmployees();
+
+        if (!token) {
+            showMessage('⚠️ Token daalo for real-time data! Bina token ke purana data dikhega.', 'error');
+        }
     }
 }
 
 // ============== STEP 2: SAVE DATA TO GITHUB ==============
 async function saveToGitHub() {
-    const token = tokenInput.value.trim() || localStorage.getItem('github_token');
+    const token = getToken();
 
     if (!token) {
         alert('❌ GitHub Token daalo!\n\nBina token ke data save nahi hoga!\n\nToken kaise banaye:\n1. GitHub → Settings → Developer settings\n2. Personal access tokens → Tokens (classic)\n3. Generate new token\n4. "repo" scope select karo\n5. Token copy karke yahan paste karo');
@@ -118,12 +153,7 @@ async function saveToGitHub() {
             throw new Error(error.message);
         }
 
-        showMessage('✅ Data successfully saved to GitHub!', 'success');
-
-        // IMPORTANT: Cache clear karne ke liye thoda wait karo
-        // GitHub CDN ko update hone mein 5-10 second lagte hain
-        await new Promise(resolve => setTimeout(resolve, 3000));
-
+        showMessage('✅ Data saved! Refresh karke dekh lo (Ctrl+Shift+R)', 'success');
         return true;
 
     } catch (error) {
@@ -140,7 +170,8 @@ async function getFileSHA(token) {
             `https://api.github.com/repos/${CONFIG.OWNER}/${CONFIG.REPO}/contents/${CONFIG.FILE_PATH}?ref=${CONFIG.BRANCH}`,
             {
                 headers: {
-                    'Authorization': `token ${token}`
+                    'Authorization': `token ${token}`,
+                    'Accept': 'application/vnd.github.v3+json'
                 }
             }
         );
@@ -160,7 +191,7 @@ async function addEmployee(e) {
     e.preventDefault();
 
     const newEmployee = {
-        id: Date.now(), // Unique ID
+        id: Date.now(),
         name: document.getElementById('name').value.trim(),
         department: document.getElementById('department').value.trim(),
         salary: parseInt(document.getElementById('salary').value),
@@ -169,7 +200,6 @@ async function addEmployee(e) {
         joiningDate: document.getElementById('joiningDate').value
     };
 
-    // Validation
     if (!newEmployee.name || !newEmployee.department || !newEmployee.email) {
         showMessage('❌ Please fill all required fields!', 'error');
         return;
@@ -181,9 +211,6 @@ async function addEmployee(e) {
         renderEmployees();
         form.reset();
         document.getElementById('joiningDate').valueAsDate = new Date();
-
-        // Cache clear ke liye force reload ka option dikhayein
-        showCacheClearMessage();
     } else {
         employees.pop();
         renderEmployees();
@@ -199,7 +226,6 @@ async function deleteEmployee(id) {
 
     if (await saveToGitHub()) {
         renderEmployees();
-        showCacheClearMessage();
     } else {
         employees = originalEmployees;
         renderEmployees();
@@ -225,30 +251,10 @@ async function editEmployee(id) {
 
     if (await saveToGitHub()) {
         renderEmployees();
-        showCacheClearMessage();
     } else {
         Object.assign(emp, originalEmp);
         renderEmployees();
     }
-}
-
-// ============== CACHE CLEAR MESSAGE ==============
-function showCacheClearMessage() {
-    const div = document.createElement('div');
-    div.className = 'success';
-    div.innerHTML = `
-        ✅ Data saved! <br>
-        <small>Agar refresh karne pe purana data dikhe toh: <br>
-        <b>Ctrl + Shift + R</b> dabao (Hard Reload)</small>
-    `;
-    div.style.position = 'fixed';
-    div.style.top = '20px';
-    div.style.right = '20px';
-    div.style.zIndex = '1000';
-    div.style.maxWidth = '400px';
-    document.body.appendChild(div);
-
-    setTimeout(() => div.remove(), 8000);
 }
 
 // ============== RENDER FUNCTIONS ==============
@@ -300,7 +306,7 @@ function showLoading(message = '⏳ Loading employees...') {
 function showMessage(msg, type) {
     const div = document.createElement('div');
     div.className = type;
-    div.textContent = msg;
+    div.innerHTML = msg;
     div.style.position = 'fixed';
     div.style.top = '20px';
     div.style.right = '20px';
