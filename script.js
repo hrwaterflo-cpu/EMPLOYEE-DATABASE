@@ -1,10 +1,14 @@
-// ============== CONFIGURATION ==============
-// IMPORTANT: Update these with YOUR GitHub details
+// ============== JSONBIN.IO CONFIGURATION ==============
+// YAHAN APNI DETAILS DAALO
 const CONFIG = {
-    OWNER: 'hrwaterflo-cpu',           // Your GitHub username
-    REPO: 'EMPLOYEE-DATABASE',          // Your repository name
-    FILE_PATH: 'employees.json',
-    BRANCH: 'main'
+    // JSONBin.io se Master Key (API Keys section mein milegi)
+    // Format: $2b$10$xxxxxxxxxxxxxxxxxxxxxxxxxx
+    JSONBIN_KEY: '$2a$10$gU8iLwW3hsihpFYUuavgNeOstqcUPermMm1sjjpiPLWfG0DNbFf2.',
+
+    // JSONBin.io se Bin ID (Create Bin ke baad milegi)
+    // Format: 64a1b2c3d4e5f6g7h8i9j0k1
+    BIN_ID: '6a1d1d4fddf5aa59f77e3deb
+'
 };
 
 // ============== STATE ==============
@@ -14,175 +18,146 @@ let employees = [];
 const form = document.getElementById('employeeForm');
 const listContainer = document.getElementById('employeeList');
 const searchInput = document.getElementById('searchInput');
-const tokenInput = document.getElementById('githubToken');
-const saveTokenBtn = document.getElementById('saveTokenBtn');
+const binIdInput = document.getElementById('binId');
+const masterKeyInput = document.getElementById('masterKey');
+const saveConfigBtn = document.getElementById('saveConfigBtn');
 
 // ============== INITIALIZATION ==============
 document.addEventListener('DOMContentLoaded', () => {
-    // Load saved token from localStorage
-    const savedToken = localStorage.getItem('github_token');
-    if (savedToken) {
-        tokenInput.value = savedToken;
+    // Load saved config from localStorage
+    const savedBinId = localStorage.getItem('jsonbin_bin_id');
+    const savedKey = localStorage.getItem('jsonbin_master_key');
+
+    if (savedBinId) {
+        binIdInput.value = savedBinId;
+        CONFIG.BIN_ID = savedBinId;
+    }
+    if (savedKey) {
+        masterKeyInput.value = savedKey;
+        CONFIG.JSONBIN_KEY = savedKey;
     }
 
-    loadEmployees();
-    form.addEventListener('submit', addEmployee);
-    searchInput.addEventListener('input', filterEmployees);
-    saveTokenBtn.addEventListener('click', saveToken);
-});
-
-// ============== TOKEN MANAGEMENT ==============
-function saveToken() {
-    const token = tokenInput.value.trim();
-    if (token) {
-        localStorage.setItem('github_token', token);
-        showMessage('Token saved in browser!', 'success');
-        // Token save hone ke baad immediately load karo
+    // Agar config saved hai toh immediately load karo
+    if (CONFIG.BIN_ID && CONFIG.JSONBIN_KEY) {
         loadEmployees();
     } else {
-        showMessage('Please enter a token first!', 'error');
+        listContainer.innerHTML = `
+            <div class="empty-state">
+                <h3>⚙️ Configuration Needed!</h3>
+                <p>Upar apni JSONBin Bin ID aur Master Key daalo.</p>
+                <p style="margin-top:10px; font-size:12px;">
+                    <a href="https://jsonbin.io" target="_blank" style="color:#667eea;">jsonbin.io</a> pe jao → Sign In → API Keys
+                </p>
+            </div>
+        `;
     }
+
+    form.addEventListener('submit', addEmployee);
+    searchInput.addEventListener('input', filterEmployees);
+    saveConfigBtn.addEventListener('click', saveConfig);
+});
+
+// ============== SAVE CONFIG ==============
+function saveConfig() {
+    const binId = binIdInput.value.trim();
+    const masterKey = masterKeyInput.value.trim();
+
+    if (!binId || !masterKey) {
+        showMessage('❌ Bin ID aur Master Key dono daalo!', 'error');
+        return;
+    }
+
+    CONFIG.BIN_ID = binId;
+    CONFIG.JSONBIN_KEY = masterKey;
+
+    localStorage.setItem('jsonbin_bin_id', binId);
+    localStorage.setItem('jsonbin_master_key', masterKey);
+
+    showMessage('✅ Config saved! Ab data load ho raha hai...', 'success');
+    loadEmployees();
 }
 
-// ============== GET TOKEN ==============
-function getToken() {
-    return tokenInput.value.trim() || localStorage.getItem('github_token');
-}
-
-// ============== STEP 1: LOAD DATA FROM GITHUB API (NO CACHE!) ==============
+// ============== STEP 1: LOAD DATA FROM JSONBIN (NO CACHE!) ==============
 async function loadEmployees() {
+    if (!CONFIG.BIN_ID || !CONFIG.JSONBIN_KEY) {
+        return;
+    }
+
     showLoading();
 
-    const token = getToken();
-
     try {
-        let data;
+        // JSONBin API - NO CACHE ISSUE! Real-time data!
+        const url = `https://api.jsonbin.io/v3/b/${CONFIG.BIN_ID}/latest`;
 
-        if (token) {
-            // ✅ METHOD 1: GitHub API se fetch (NO CACHE - REALTIME!)
-            // API se data fetch karne pe CDN cache nahi lagta
-            const apiUrl = `https://api.github.com/repos/${CONFIG.OWNER}/${CONFIG.REPO}/contents/${CONFIG.FILE_PATH}?ref=${CONFIG.BRANCH}`;
-
-            const response = await fetch(apiUrl, {
-                headers: {
-                    'Authorization': `token ${token}`,
-                    'Accept': 'application/vnd.github.v3+json'
-                }
-            });
-
-            if (response.ok) {
-                const fileData = await response.json();
-                // Content Base64 mein hota hai, decode karna padega
-                const content = atob(fileData.content.replace(/\s/g, ''));
-                data = JSON.parse(content);
-                console.log('✅ Data loaded via GitHub API (Real-time)');
-            } else if (response.status === 404) {
-                // File exist nahi karti
-                console.log('File not found, creating empty list');
-                data = { employees: [] };
-            } else {
-                throw new Error(`API Error: ${response.status}`);
+        const response = await fetch(url, {
+            method: 'GET',
+            headers: {
+                'X-Master-Key': CONFIG.JSONBIN_KEY
             }
-        } else {
-            // ⚠️ METHOD 2: Without token - raw URL (CACHE LAGEGA!)
-            // Ye sirf pehli baar ke liye hai, token ke bina cache issue rahega
-            const timestamp = new Date().getTime();
-            const rawUrl = `https://raw.githubusercontent.com/${CONFIG.OWNER}/${CONFIG.REPO}/${CONFIG.BRANCH}/${CONFIG.FILE_PATH}?nocache=${timestamp}`;
+        });
 
-            const response = await fetch(rawUrl, { cache: 'no-store' });
-
-            if (response.ok) {
-                data = await response.json();
-                console.log('⚠️ Data loaded via raw URL (May be cached!)');
-            } else {
-                data = { employees: [] };
+        if (!response.ok) {
+            if (response.status === 404) {
+                // Bin exist nahi karti
+                showMessage('⚠️ Bin nahi mili! Nayi bin banao ya ID check karo.', 'error');
+                employees = [];
+                renderEmployees();
+                return;
             }
+            throw new Error(`HTTP ${response.status}: ${response.statusText}`);
         }
 
-        employees = data.employees || [];
+        const result = await response.json();
+        console.log('✅ Data loaded from JSONBin:', result);
+
+        // JSONBin ka structure: { record: { employees: [...] } }
+        employees = result.record?.employees || [];
         renderEmployees();
 
     } catch (error) {
         console.error('Error loading:', error);
+        showMessage('❌ Load error: ' + error.message, 'error');
         employees = [];
         renderEmployees();
-
-        if (!token) {
-            showMessage('⚠️ Token daalo for real-time data! Bina token ke purana data dikhega.', 'error');
-        }
     }
 }
 
-// ============== STEP 2: SAVE DATA TO GITHUB ==============
-async function saveToGitHub() {
-    const token = getToken();
-
-    if (!token) {
-        alert('❌ GitHub Token daalo!\n\nBina token ke data save nahi hoga!\n\nToken kaise banaye:\n1. GitHub → Settings → Developer settings\n2. Personal access tokens → Tokens (classic)\n3. Generate new token\n4. "repo" scope select karo\n5. Token copy karke yahan paste karo');
+// ============== STEP 2: SAVE DATA TO JSONBIN ==============
+async function saveData() {
+    if (!CONFIG.BIN_ID || !CONFIG.JSONBIN_KEY) {
+        alert('❌ Pehle Bin ID aur Master Key daalo!');
         return false;
     }
 
     try {
-        showLoading('💾 Saving to GitHub...');
+        showLoading('💾 Saving to JSONBin...');
 
-        // Pehle existing file ka SHA lena padega (update karne ke liye)
-        const sha = await getFileSHA(token);
+        const url = `https://api.jsonbin.io/v3/b/${CONFIG.BIN_ID}`;
 
-        // Data ko Base64 mein convert karna
-        const content = btoa(unescape(encodeURIComponent(JSON.stringify({ employees }, null, 2))));
-
-        const response = await fetch(
-            `https://api.github.com/repos/${CONFIG.OWNER}/${CONFIG.REPO}/contents/${CONFIG.FILE_PATH}`,
-            {
-                method: 'PUT',
-                headers: {
-                    'Authorization': `token ${token}`,
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    message: `Update employees - ${new Date().toLocaleString()}`,
-                    content: content,
-                    sha: sha,
-                    branch: CONFIG.BRANCH
-                })
-            }
-        );
+        const response = await fetch(url, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-Master-Key': CONFIG.JSONBIN_KEY
+            },
+            body: JSON.stringify({ employees })
+        });
 
         if (!response.ok) {
             const error = await response.json();
-            throw new Error(error.message);
+            throw new Error(error.message || `HTTP ${response.status}`);
         }
 
-        showMessage('✅ Data saved! Refresh karke dekh lo (Ctrl+Shift+R)', 'success');
+        const result = await response.json();
+        console.log('✅ Data saved to JSONBin:', result);
+
+        showMessage('✅ Data saved! Refresh karke dekh lo - INSTANT update!', 'success');
         return true;
 
     } catch (error) {
-        showMessage('❌ Error: ' + error.message, 'error');
+        showMessage('❌ Save error: ' + error.message, 'error');
         console.error(error);
         return false;
-    }
-}
-
-// ============== HELPER: Get File SHA ==============
-async function getFileSHA(token) {
-    try {
-        const response = await fetch(
-            `https://api.github.com/repos/${CONFIG.OWNER}/${CONFIG.REPO}/contents/${CONFIG.FILE_PATH}?ref=${CONFIG.BRANCH}`,
-            {
-                headers: {
-                    'Authorization': `token ${token}`,
-                    'Accept': 'application/vnd.github.v3+json'
-                }
-            }
-        );
-
-        if (response.ok) {
-            const data = await response.json();
-            return data.sha;
-        }
-        return null; // New file
-    } catch {
-        return null;
     }
 }
 
@@ -194,24 +169,26 @@ async function addEmployee(e) {
         id: Date.now(),
         name: document.getElementById('name').value.trim(),
         department: document.getElementById('department').value.trim(),
-        salary: parseInt(document.getElementById('salary').value),
+        salary: parseInt(document.getElementById('salary').value) || 0,
         email: document.getElementById('email').value.trim(),
         phone: document.getElementById('phone').value.trim(),
         joiningDate: document.getElementById('joiningDate').value
     };
 
+    // Validation
     if (!newEmployee.name || !newEmployee.department || !newEmployee.email) {
-        showMessage('❌ Please fill all required fields!', 'error');
+        showMessage('❌ Name, Department aur Email required hain!', 'error');
         return;
     }
 
     employees.push(newEmployee);
 
-    if (await saveToGitHub()) {
+    if (await saveData()) {
         renderEmployees();
         form.reset();
         document.getElementById('joiningDate').valueAsDate = new Date();
     } else {
+        // Rollback
         employees.pop();
         renderEmployees();
     }
@@ -224,7 +201,7 @@ async function deleteEmployee(id) {
     const originalEmployees = [...employees];
     employees = employees.filter(emp => emp.id !== id);
 
-    if (await saveToGitHub()) {
+    if (await saveData()) {
         renderEmployees();
     } else {
         employees = originalEmployees;
@@ -249,7 +226,7 @@ async function editEmployee(id) {
     emp.email = prompt('Email:', emp.email)?.trim() || emp.email;
     emp.phone = prompt('Phone:', emp.phone)?.trim() || emp.phone;
 
-    if (await saveToGitHub()) {
+    if (await saveData()) {
         renderEmployees();
     } else {
         Object.assign(emp, originalEmp);
@@ -304,6 +281,11 @@ function showLoading(message = '⏳ Loading employees...') {
 }
 
 function showMessage(msg, type) {
+    // Remove old messages
+    document.querySelectorAll('.error, .success').forEach(el => {
+        if (el.style.position === 'fixed') el.remove();
+    });
+
     const div = document.createElement('div');
     div.className = type;
     div.innerHTML = msg;
@@ -312,6 +294,7 @@ function showMessage(msg, type) {
     div.style.right = '20px';
     div.style.zIndex = '1000';
     div.style.maxWidth = '400px';
+    div.style.boxShadow = '0 5px 20px rgba(0,0,0,0.2)';
     document.body.appendChild(div);
 
     setTimeout(() => div.remove(), 5000);
