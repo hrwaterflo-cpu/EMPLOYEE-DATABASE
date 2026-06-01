@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee Database</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>👥 Employee Database</h1>
+        
+        <!-- Add Employee Form -->
+        <div class="form-section">
+            <h2>Add New Employee</h2>
+            <form id="employeeForm">
+                <input type="text" id="name" placeholder="Full Name" required>
+                <input type="text" id="department" placeholder="Department" required>
+                <input type="number" id="salary" placeholder="Salary" required>
+                <input type="email" id="email" placeholder="Email" required>
+                <input type="tel" id="phone" placeholder="Phone Number" required>
+                <input type="date" id="joiningDate" required>
+                <button type="submit">➕ Add Employee</button>
+            </form>
+        </div>
+
+        <!-- Token Input (For Security) -->
+        <div class="token-section">
+            <h3>🔑 GitHub Token (Required for Save)</h3>
+            <input type="password" id="githubToken" placeholder="Enter your GitHub Token">
+            <p class="info">Token sirf aapke browser mein rahega, secure hai!</p>
+        </div>
+
+        <!-- Employee List -->
+        <div class="list-section">
+            <h2>📋 Employee List</h2>
+            <div class="search-box">
+                <input type="text" id="searchInput" placeholder="🔍 Search by name or department...">
+            </div>
+            <div id="employeeList"></div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
